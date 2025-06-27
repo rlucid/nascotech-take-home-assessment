@@ -24,7 +24,7 @@ public class PaymentServiceClient {
         log.info("Initialized payment client with baseUrl {}", baseUrl);
     }
 
-    public Mono<PaymentDto> retrieveFinancialTransaction(Long paymentId) {
+    public Mono<PaymentDto> retrievePaymentDetails(Long paymentId) {
         log.info("Retrieving payment for ID {} ", paymentId);
         return webClient.get()
                 .uri("/payments/{id}", paymentId)

@@ -53,7 +53,7 @@ public class FinancialTransactionServiceImpl implements FinancialTransactionServ
 
     private Mono<PaymentResponse> retrieveAndBuildPaymentResponse(FinancialTransaction financialTransaction) {
         log.info("Retrieving and building payment response");
-        return paymentServiceClient.retrieveFinancialTransaction(financialTransaction.getPaymentId())
+        return paymentServiceClient.retrievePaymentDetails(financialTransaction.getPaymentId())
                 .map(paymentDto -> new PaymentResponse(financialTransaction, paymentDto));
     }
 

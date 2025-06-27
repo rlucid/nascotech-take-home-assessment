@@ -53,7 +53,7 @@ class FinancialTransactionServiceImplTest {
 
         LocalDateTime dummyDateTime = LocalDateTime.now();
         PaymentDto paymentDto = new PaymentDto(100L, BigDecimal.TEN, "SUCCESS", dummyDateTime, dummyDateTime);
-        Mockito.when(paymentServiceClient.retrieveFinancialTransaction(100L))
+        Mockito.when(paymentServiceClient.retrievePaymentDetails(100L))
                 .thenReturn(Mono.just(paymentDto));
 
         Mono<ResponseEntity<DataListPaymentResponse>> result = service.filterFinancialTransactions(
