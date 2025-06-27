@@ -2,7 +2,6 @@ package org.nascotech.take_home_assessment.client;
 
 import lombok.extern.slf4j.Slf4j;
 import org.nascotech.take_home_assessment.dto.PaymentDto;
-import org.nascotech.take_home_assessment.dto.PaymentResponse;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +12,11 @@ import reactor.core.publisher.Mono;
 
 @Slf4j
 @Component
-public class PaymentClient {
+public class PaymentServiceClient {
 
     private final WebClient webClient;
 
-    public PaymentClient(WebClient.Builder builder, @Value("${payment.service.url}") String baseUrl) {
+    public PaymentServiceClient(WebClient.Builder builder, @Value("${payment.service.url}") String baseUrl) {
         this.webClient = builder.baseUrl(baseUrl).build();
         log.info("Initialized payment client with baseUrl {}", baseUrl);
     }

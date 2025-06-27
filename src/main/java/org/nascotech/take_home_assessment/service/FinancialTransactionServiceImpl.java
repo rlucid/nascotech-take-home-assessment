@@ -2,7 +2,7 @@ package org.nascotech.take_home_assessment.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.nascotech.take_home_assessment.client.PaymentClient;
+import org.nascotech.take_home_assessment.client.PaymentServiceClient;
 import org.nascotech.take_home_assessment.dto.DataListPaymentResponse;
 import org.nascotech.take_home_assessment.dto.PaymentResponse;
 import org.nascotech.take_home_assessment.model.FinancialTransaction;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class FinancialTransactionServiceImpl implements FinancialTransactionService {
 
     private final FinancialTransactionRepository financialTransactionRepository;
-    private final PaymentClient paymentClient;
+    private final PaymentServiceClient paymentServiceClient;
 
     @Override
     public Mono<ResponseEntity<DataListPaymentResponse>> filterFinancialTransactions(
@@ -53,14 +53,14 @@ public class FinancialTransactionServiceImpl implements FinancialTransactionServ
 
     private Mono<PaymentResponse> retrieveAndBuildPaymentResponse(FinancialTransaction financialTransaction) {
         log.info("Retrieving and building payment response");
-        return paymentClient.retrieveFinancialTransaction(financialTransaction.getPaymentId())
+        return paymentServiceClient.retrieveFinancialTransaction(financialTransaction.getPaymentId())
                 .map(paymentDto -> new PaymentResponse(financialTransaction, paymentDto));
     }
 
     private ResponseEntity<DataListPaymentResponse> buildDataListResponse(List<PaymentResponse> paymentResponses) {
         log.info("Sorting payment response list by payment IDs");
         List<PaymentResponse> sortedResponses = paymentResponses.stream()
-                .sorted(Comparator.comparing(p -> p.getFinancialTransaction().getPaymentId(), Comparator.reverseOrder()))
+                .sorted(Comparator.comparing(p -> p.paymentDto().id(), Comparator.reverseOrder()))
                 .toList();
 
         log.info("Building data list payment response");
