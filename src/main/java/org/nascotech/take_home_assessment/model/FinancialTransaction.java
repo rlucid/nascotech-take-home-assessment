@@ -20,10 +20,11 @@ public class FinancialTransaction {
     private String service;
     private String status;
     private String reference;
+    private Long paymentId;
 
     @CreationTimestamp
-    private LocalDateTime createdOn;
+    private LocalDateTime dateCreated;
 
     @UpdateTimestamp
-    private LocalDateTime modifiedOn;
+    private LocalDateTime dateModified;
 }
