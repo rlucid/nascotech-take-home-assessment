@@ -5,6 +5,8 @@ import net.kaczmarzyk.spring.data.jpa.domain.LikeIgnoreCase;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Conjunction;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
+import org.nascotech.take_home_assessment.model.FinancialTransaction;
+import org.springframework.data.jpa.domain.Specification;
 
 
 @Conjunction(value = {
@@ -19,5 +21,5 @@ import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
                 @Spec(path = "dateCreated", params = {"dateFrom", "dateTo"}, config = "yyyy-MM-dd", spec = Between.class),
         })
 })
-public interface FinancialTransactionSpec {
+public interface FinancialTransactionSpec extends Specification<FinancialTransaction> {
 }

@@ -18,12 +18,18 @@ public class FinancialTransactionServiceImpl implements FinancialTransactionServ
     private final FinancialTransactionRepository financialTransactionRepository;
 
     @Override
-    public Page<FinancialTransaction> retrievePayments(FinancialTransactionSpec expenseSpec, Pageable pageable) {
+    public Page<FinancialTransaction> retrievePayments(
+            FinancialTransactionSpec expenseSpec,
+            Pageable pageable
+    ) {
         return null;
     }
 
     @Override
-    public Page<FinancialTransaction> filterFinancialTransactions(FinancialTransactionSpec expenseSpec, Pageable pageable) {
-        return null;
+    public Page<FinancialTransaction> filterFinancialTransactions(
+            FinancialTransactionSpec financialTransactionSpec,
+            Pageable pageable
+    ) {
+        return financialTransactionRepository.findAll(financialTransactionSpec, pageable);
     }
 }
