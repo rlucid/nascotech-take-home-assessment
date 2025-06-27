@@ -10,6 +10,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 
+/**
+ * Client to make request to payment service
+ */
 @Slf4j
 @Component
 public class PaymentServiceClient {
