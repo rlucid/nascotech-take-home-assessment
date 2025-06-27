@@ -39,31 +39,37 @@ public class FinancialTransactionServiceImpl implements FinancialTransactionServ
         return fluxFinancialTransactions
                 .flatMap(this::retrieveAndBuildPaymentResponse)
                 .collectList()
-                .map(paymentResponses -> ResponseEntity.ok(buildDataListResponse(paymentResponses)))
-                .onErrorResume(ex -> {
-            log.error("Error while fetching transactions: {}", ex.getMessage());
-            return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null));
-        });
+                .map(this::buildDataListResponse)
+                .onErrorResume(this::handleError);
     }
 
     private Page<FinancialTransaction> filter(
             FinancialTransactionSpec financialTransactionSpec,
             Pageable pageable
     ) {
+        log.info("Filtering financial transaction with spec {} and pageable {}", financialTransactionSpec, pageable);
         return financialTransactionRepository.findAll(financialTransactionSpec, pageable);
     }
 
     private Mono<PaymentResponse> retrieveAndBuildPaymentResponse(FinancialTransaction financialTransaction) {
+        log.info("Retrieving and building payment response");
         return paymentClient.retrieveFinancialTransaction(financialTransaction.getPaymentId())
                 .map(paymentDto -> new PaymentResponse(financialTransaction, paymentDto));
     }
 
-    private DataListPaymentResponse buildDataListResponse(List<PaymentResponse> paymentResponses) {
+    private ResponseEntity<DataListPaymentResponse> buildDataListResponse(List<PaymentResponse> paymentResponses) {
+        log.info("Sorting payment response list by payment IDs");
         List<PaymentResponse> sortedResponses = paymentResponses.stream()
                 .sorted(Comparator.comparing(p -> p.getFinancialTransaction().getPaymentId(), Comparator.reverseOrder()))
                 .toList();
 
+        log.info("Building data list payment response");
         DataListPaymentResponse response = new DataListPaymentResponse(sortedResponses, Map.of("self", "/api/payments"));
         return ResponseEntity.ok(response);
+    }
+
+    private Mono<ResponseEntity<DataListPaymentResponse>> handleError(Throwable ex) {
+        log.error("Error occurred while fetching transactions: {}", ex.getMessage());
+        return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null));
     }
 }
