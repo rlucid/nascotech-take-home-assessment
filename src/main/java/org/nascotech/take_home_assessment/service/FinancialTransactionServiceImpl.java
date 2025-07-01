@@ -70,6 +70,6 @@ public class FinancialTransactionServiceImpl implements FinancialTransactionServ
 
     private Mono<ResponseEntity<DataListPaymentResponse>> handleError(Throwable ex) {
         log.error("Error occurred while fetching transactions: {}", ex.getMessage());
-        return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null));
+        return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
     }
 }
